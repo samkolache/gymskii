@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link.active {
+    color: #6195C6;
+}
+
+.nav-link:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #6195C6; /* Customize color */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+  }
+
+/* Dropdown base state */
+.dropdown {
+  position: absolute;
+  top: 16px;
+  right: 0px;
+  background-color: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 100;
+  opacity: 0;
+  transform: scale(0.95);
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  text-wrap: nowrap;
+}
+
+/* When dropdown is open */
+.dropdown.open {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+  max-height: 500px; /* Adjust based on content height */
+}
+
+/* Scale Hover */
+.scale-hover {
+  transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+}
+
+.scale-hover:hover {
+  transform: scale(1.05); /* Scale up to 105% on hover */
+}
