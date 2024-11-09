@@ -4,14 +4,27 @@ import Link from "next/link"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { signOut } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
+
 
 
 
 export default function Sidebar() {
 
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        router.push("/")
+        signOut();
+        
+
+    }
+
     return (
             <aside className='w-56 mx-12 px-4 hidden md:block'>
                 <ul className='pt-8 flex flex-col space-y-3'>
@@ -43,11 +56,11 @@ export default function Sidebar() {
                     </li>
                     <li className='p-2 cursor-pointer font-medium flex gap-2'>
                         <LogoutIcon />
-                        <Link 
-                        href = "/logout"
-                        className="w-full">
+                        <button 
+                        className="w-full"
+                        onClick={handleLogout}>
                             Logout
-                        </Link>
+                        </button>
                     </li>
                 </ul>
             </aside>

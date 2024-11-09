@@ -14,9 +14,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import {signOut} from 'firebase/auth'
-import {auth} from '@/app/config/firebase/firebase-config'
-import {useRouter} from 'next/navigation'
 
 export default function Navbar() {
     
@@ -133,12 +130,7 @@ export default function Navbar() {
 }
 
 function ProfileDropdown({isProfOpen}) {
-    const router = useRouter()
 
-    const handleLogOut = async() => {
-        await signOut(auth)
-        router.push("/logout")
-    }
 
     return(
         <>
@@ -157,7 +149,7 @@ function ProfileDropdown({isProfOpen}) {
                     <DashboardIcon className="text-brand " />
                         <Link href = "/profile/dash-results" className="font-medium">Gains Lab</Link>
                     </li>
-                    <li className="flex gap-4 hover:bg-linkHover p-2 rounded-lg cursor-pointer" onClick={handleLogOut}>
+                    <li className="flex gap-4 hover:bg-linkHover p-2 rounded-lg cursor-pointer">
                         <LogoutIcon className="text-brand" />
                         <span className="font-medium">Logout</span>
                     </li>

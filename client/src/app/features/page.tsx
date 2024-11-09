@@ -20,7 +20,7 @@ export default function Features() {
                     <p className="text-lg md:text-xl text-gray-500 leading-relaxed">From visuals to your diet, gymskii offers a central dashboard called the "Gains Lab"</p>
                 </div>
 
-                <div className="mt-8 bg-gray-100">
+            
                     <div className="flex flex-col md:flex-row justify-center items-center gap-5">
                         <Card icon = {<TrendingUpIcon style={{ fontSize: 60 }} />} title = "Visual Progress Tracking" p = "Log every workout and see your progress unfold with detailed graphs and visuals." />
                         <Card icon = {<AccessAlarmIcon style={{ fontSize: 60 }} />} title = "Supplement Reminders" p = "Track every supplement and set timely reminders to stay on top of your routine." />
@@ -31,7 +31,6 @@ export default function Features() {
                         <Card icon = {<SchoolIcon style={{ fontSize: 60 }} />} title = "Learn Effectively" p = "Take advantage of our free resources to improve how you workout" />
                         <Card icon = {<GroupIcon style={{ fontSize: 60 }} />} title = "Community" p = "Join a community of driven individuals all striving for daily improvement." />
                     </div>
-                </div>
                 
 
             </div>

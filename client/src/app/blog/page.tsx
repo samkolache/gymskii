@@ -8,9 +8,8 @@ export default function Blog() {
             <div className="mt-12">
 
                 {/* Hero Container */}
-                <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-10">
+                <div className="max-w-7xl mx-auto px-4 py-10 flex justify-center">
 
-                    {/* Left side */}
                     <div className="flex flex-col space-y-5 w-full md:w-1/2 text-center md:text-left">
                         <h1 className="text-4xl md:text-5xl font-bold">
                             Articles from gym<span className="text-brand">skii</span>
@@ -21,14 +20,6 @@ export default function Blog() {
                         </p>
                         <span className="h-[2px] bg-black w-[80px] block mx-auto md:mx-0"></span>
                     </div>
-
-                        {/* Right Side */}
-                    <Image 
-                        src = "./blog-ill.svg"
-                        alt='Illustration of people looking at blog post'
-                        width={256}
-                        height={256}
-                    />
                 </div>
 
 

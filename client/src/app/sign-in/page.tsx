@@ -1,45 +1,46 @@
 'use client';
-import MinimalNav from '../components/navbar/MinimalNav';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useState } from 'react';
-import {useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth'
-import {auth} from "@/app/config/firebase/firebase-config"
-import {useRouter} from 'next/navigation'
+import axios from 'axios';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 
 export default function SignIn() {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
     const router = useRouter();
 
-    const handleSignUp = async (e) => {
-        e.preventDefault();
-        try{
-            const res = await signInWithEmailAndPassword(email,password)
-            console.log({res})
-            setEmail('')
-            setPassword('')
-            router.push('/')
-
-        }catch(e) {
-            console.error(e)
+    async function handleLogin(event) {
+        event.preventDefault(); // Prevent page refresh
+        const res = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+        });
+        if (res?.error) {
+            console.error(res.error);
+            alert('Login failed. Please check your credentials.');
+        } else {
+            console.log("Login successful!");
+            router.push("/profile")
+            // You can redirect the user or display a success message here
         }
     }
 
     return (
         <>
-            <MinimalNav />
+            
             {/* Container */}
             <div className='flex justify-center items-center min-h-screen'>
                 <div className='w-full flex flex-col items-center justify-center p-6'>
                     <h1 className="text-3xl font-bold">Sign in</h1>
                     <p className='mt-2'>Enter them deets!</p>
-                    
+
                     {/* Form */}
-                    <form className='mt-4 w-full max-w-sm' onSubmit={handleSignUp}>
+                    <form onSubmit={handleLogin} className='mt-4 w-full max-w-sm'>
                         {/* Email Input */}
                         <div>
                             <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email address</label>
@@ -86,7 +87,7 @@ export default function SignIn() {
                                 </a>
                             </div>
                         </div>
-                        
+
                         <button
                             type="submit"
                             className="w-full mt-4 px-6 py-3 bg-brand hover:bg-brand-dark text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-brand focus:ring-opacity-50 transition duration-300"
@@ -99,6 +100,7 @@ export default function SignIn() {
                     <p className='text-gray-500 mt-4'>OR CONTINUE WITH</p>
                     <button
                         className='flex items-center justify-center gap-4 px-8 py-2 rounded-lg border mt-2'
+                        onClick={() => signIn('google')}
                     >
                         <FontAwesomeIcon icon={faGoogle} className="text-stats" size='lg' />
                         <p>Google</p>
