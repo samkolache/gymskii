@@ -1,46 +1,78 @@
 'use client';
-import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 
 
 export default function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
     const router = useRouter();
+   
+
+
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('successMessage');
+        if (message) {
+            setSuccessMessage(message);
+            setTimeout(() => setSuccessMessage(''), 3000);
+        }
+    }, []);
 
     async function handleLogin(event) {
         event.preventDefault(); // Prevent page refresh
+
+        const validationRules = [
+            {check: !email && !password, message: "Please enter your email and password"},
+            {check: !email, message: "Please enter your email"},
+            {check: !password, message: "Please enter your password"}
+        ]
+    
+        for(const rule of validationRules) {
+            if(rule.check) {
+                setError(rule.message)
+                return;
+            }
+        }
+
         const res = await signIn("credentials", {
             redirect: false,
             email,
             password,
         });
+
         if (res?.error) {
-            console.error(res.error);
-            alert('Login failed. Please check your credentials.');
+            setError('Incorrect email or password');
         } else {
-            console.log("Login successful!");
-            router.push("/profile")
-            // You can redirect the user or display a success message here
+            router.push("/profile");
         }
     }
 
     return (
         <>
+        {successMessage && (
+                <div className="p-4 bg-green-500 text-white text-center max-w-[400px] mx-auto rounded-md">
+                    {successMessage}
+                </div>
+             )}
             
             {/* Container */}
             <div className='flex justify-center items-center min-h-screen'>
                 <div className='w-full flex flex-col items-center justify-center p-6'>
                     <h1 className="text-3xl font-bold">Sign in</h1>
                     <p className='mt-2'>Enter them deets!</p>
-
+                    <div className={!error ? "hidden" : "bg-red-100 p-3 mt-2 rounded-md"}>
+                        <p className='text-red-800'>{error}</p>
+                    </div>
+                    
                     {/* Form */}
-                    <form onSubmit={handleLogin} className='mt-4 w-full max-w-sm'>
+                    <form onSubmit={handleLogin} className='mt-4 w-full max-w-sm' noValidate>
                         {/* Email Input */}
                         <div>
                             <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email address</label>
@@ -95,16 +127,6 @@ export default function SignIn() {
                             Sign in
                         </button>
                     </form>
-
-                    {/* Google */}
-                    <p className='text-gray-500 mt-4'>OR CONTINUE WITH</p>
-                    <button
-                        className='flex items-center justify-center gap-4 px-8 py-2 rounded-lg border mt-2'
-                        onClick={() => signIn('google')}
-                    >
-                        <FontAwesomeIcon icon={faGoogle} className="text-stats" size='lg' />
-                        <p>Google</p>
-                    </button>
                 </div>
             </div>
         </>

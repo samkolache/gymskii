@@ -2,8 +2,7 @@
 import Image from 'next/image';
 import ModeIcon from '@mui/icons-material/Mode';
 import EditPopup from '../components/profile/EditPopup';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function Profile() {
     const [isModalOpen, setModal] = useState(false);
@@ -16,6 +15,25 @@ export default function Profile() {
     });
 
     const toggleModal = () => setModal(prev => !prev);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('/api/register');
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserData(data); // Set the user data from the response
+                } else {
+                    console.error('Failed to fetch user data:', response.status);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+    
+        fetchUserData();
+    }, []);
+    
 
 
     return (
@@ -65,7 +83,7 @@ export default function Profile() {
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <p className='text-gray-500'>Quote</p>
-                                    <p className='text-gray-500 font-medium'>{userData.quote}</p>
+                                    <p className='text-gray-500 font-medium'></p>
                                 </div>
                             </div>
 
@@ -76,7 +94,7 @@ export default function Profile() {
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <p className='text-gray-500'>Phone</p>
-                                    <p className='text-gray-500 font-medium'>{userData.phoneNumber}</p>
+                                    <p className='text-gray-500 font-medium'></p>
                                 </div>
                             </div>
                         </div>

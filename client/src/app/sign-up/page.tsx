@@ -1,39 +1,50 @@
 'use client';
-import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+//only interacts with MONGO, not with AUTH(that's sign in)
 import { useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import {useSession} from 'next-auth/react';
 
 export default function SignUp() {
-    const { data: session } = useSession();
     const router = useRouter();
+    //manage form input data state
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [error, setError] = useState('');
 
     
 
     async function handleSubmit(event) {
+        event.preventDefault(); 
 
-        
+        const validationRules = [
+            {check: !firstName && !lastName && !email && !password && !passwordConfirm, message: "Please enter your details below"},
+            {check: !firstName, message: "Please enter your first name"},
+            {check: !lastName, message: "Please enter your last name"},
+            {check: !email, message: "Please enter your email"},
+            {check: !password, message: "Please enter your password"},
+            {check: !passwordConfirm, message: "Please confirm your password"},
+        ]
 
-        event.preventDefault();
+        for(const rule of validationRules) {
+            if(rule.check) {
+                setError(rule.message)
+                return;
+            }
+        }
 
         try {
-            const formData = new FormData(event.currentTarget)
+            const formData = new FormData(event.currentTarget) //create an object to hold form data
 
+            //store our input in variables
             const fname = formData.get('fname')
             const lname = formData.get('lname')
             const email = formData.get('email')
             const password = formData.get('password')
 
-            const response = await fetch(`/api/register`, {
+            //sends a post response with our data as JSON
+            const response = await fetch(`/api/register`, { //returns a response object that can be used to check if succesfull
                 method: 'POST',
                 headers: {
                     "content-type": "application/json"
@@ -46,7 +57,11 @@ export default function SignUp() {
                 })
             })
 
-            response.status === 201 && router.push('/')
+            if (response.status === 201) {
+                router.push('/sign-in?successMessage=Account created successfully. You can now sign in!');
+            }
+
+            // response.status === 201 && router.push('/')
 
         }catch(e) {
             console.log(e.message)
@@ -60,10 +75,15 @@ export default function SignUp() {
                 <div className="flex flex-col items-center justify-center mt-4 lg:mt-0 px-4 py-4 lg:px-8">
                     <h1 className="text-3xl lg:text-4xl font-bold text-center">Sign up</h1>
                     <p className="mt-2 text-center">Let's get started!</p>
+                    <div className={!error ? "hidden" : "bg-red-100 p-3 mt-2 rounded-md"}>
+                        <p className='text-red-800'>{error}</p>
+                    </div>
 
                     <form 
                     onSubmit={handleSubmit} 
-                    className="mt-4 w-full max-w-lg">
+                    className="mt-4 w-full max-w-lg"
+                    noValidate
+                    >
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div>
                                 <label htmlFor="first-name" className="block text-lg font-medium text-gray-700">First Name</label>

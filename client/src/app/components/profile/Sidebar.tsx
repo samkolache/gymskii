@@ -18,11 +18,9 @@ export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await signOut({redirect: false});
         router.push("/")
-        signOut();
-        
-
     }
 
     return (
@@ -57,7 +55,6 @@ export default function Sidebar() {
                     <li className='p-2 cursor-pointer font-medium flex gap-2'>
                         <LogoutIcon />
                         <button 
-                        className="w-full"
                         onClick={handleLogout}>
                             Logout
                         </button>

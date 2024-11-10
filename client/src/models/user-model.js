@@ -1,8 +1,9 @@
 import mongoose, {Schema} from "mongoose"
+//a schema defines the strucutre of the documents within a collection
 
-const userSchema = new Schema({
+const userSchema = new Schema({ //instance of a schema
     fname: {
-        required: true,
+        required: true, 
         type: String,
     },
     lname: {
@@ -19,5 +20,5 @@ const userSchema = new Schema({
     },
 });
 
-export const User = mongoose.models.User || mongoose.model("User", userSchema);
+export const User = mongoose.models.User || mongoose.model("User", userSchema); //creates a "User" model using the user schema
 
