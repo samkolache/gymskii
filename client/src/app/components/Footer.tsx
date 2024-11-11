@@ -6,7 +6,7 @@ export default function Footer() {
     return (
         <>
             {/* Footer Container */}
-            <div className=" border-t">
+            <div className=" border-t pt-3">
                 <div className="flex flex-col md:flex-row justify-center items-center md:items-start w-full max-w-screen-lg mx-auto">  {/* Center on desktop */}
                     
                     {/* logo and socials */}

@@ -2,6 +2,7 @@
 //only interacts with MONGO, not with AUTH(that's sign in)
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function SignUp() {
     const router = useRouter();
@@ -25,6 +26,7 @@ export default function SignUp() {
             {check: !email, message: "Please enter your email"},
             {check: !password, message: "Please enter your password"},
             {check: !passwordConfirm, message: "Please confirm your password"},
+            {check: password != passwordConfirm, message: "Passwords don't match"},
         ]
 
         for(const rule of validationRules) {

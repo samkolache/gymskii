@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createUser } from "@/queries/users";
 import bcrypt from "bcryptjs";
 import { dbConnect } from "@/lib/mongo";
-import { getSession } from "next-auth/react";
 
 export const POST = async (request) => { //handle the post request
   try {
@@ -48,50 +47,3 @@ export const POST = async (request) => { //handle the post request
   }
 };
 
-export const GET = async (request) => {
-  try {
-    await dbConnect();
-
-    // Get the session to identify the logged-in user
-    const session = await getSession({ req: request });
-
-    if (!session) {
-      return new NextResponse(JSON.stringify({ message: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Find the user in the database using the email from the session
-    const user = await User.findOne({ email: session.user.email });
-
-    if (!user) {
-      return new NextResponse(JSON.stringify({ message: "User not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Return user data (only fname, lname, and email)
-    return new NextResponse(
-      JSON.stringify({
-        firstName: user.fname,
-        lastName: user.lname,
-        email: user.email,
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (err) {
-    console.error("Error fetching user data:", err.message);
-    return new NextResponse(
-      JSON.stringify({ error: err.message || "Internal Server Error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
-};

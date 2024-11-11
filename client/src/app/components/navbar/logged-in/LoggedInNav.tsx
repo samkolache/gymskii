@@ -1,4 +1,3 @@
-'use client'
 "use client"
 import Image from "next/image"
 import Link from "next/link"
@@ -14,6 +13,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 
 export default function Navbar() {
     
@@ -28,6 +30,9 @@ export default function Navbar() {
     
 
     const pathname = usePathname();
+    const router = useRouter();
+
+    
 
 
     return(
@@ -92,7 +97,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-3 cursor-pointer relative" onClick={toggleProf}>
                     <div className="w-12 h-12 relative">
                         <Image 
-                            src="/sam-pfp.jpg" 
+                            src="/pfp.jpg" 
                             alt="user profile image"
                             layout='fill'
                             className="rounded-full object-cover"
@@ -131,7 +136,12 @@ export default function Navbar() {
 
 function ProfileDropdown({isProfOpen}) {
 
+    const router = useRouter();
 
+    const handleLogout = async () => {
+        await signOut({redirect: false});
+        router.push("/")
+    }
     return(
         <>
             <div className = {clsx(
@@ -149,7 +159,10 @@ function ProfileDropdown({isProfOpen}) {
                     <DashboardIcon className="text-brand " />
                         <Link href = "/profile/dash-results" className="font-medium">Gains Lab</Link>
                     </li>
-                    <li className="flex gap-4 hover:bg-linkHover p-2 rounded-lg cursor-pointer">
+                    <li 
+                    className="flex gap-4 hover:bg-linkHover p-2 rounded-lg cursor-pointer"
+                    onClick={handleLogout}
+                    >
                         <LogoutIcon className="text-brand" />
                         <span className="font-medium">Logout</span>
                     </li>
