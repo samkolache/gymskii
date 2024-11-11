@@ -38,7 +38,7 @@ export default function SupportForm() {
           <textarea
             id="message"
             name="message"
-            rows="4"
+            rows={4}
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand focus:border-brand sm:text-sm resize-none"
             required
           />
