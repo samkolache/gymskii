@@ -1,8 +1,8 @@
 import { User } from "../models/user-model";
 
-export async function createUser(user) { //takes user as a parameter, expecting an object with fname,lnmae ect
+export async function createUser(user) { 
     try {
-        await User.create(user); //create is a built in mongoose function to create a user
+        await User.create(user); 
     } catch (e) {
         throw new Error(e.message || "Failed to create user");
     }
